@@ -28,6 +28,18 @@
     </dependency>
   </dependencies>
 
+  <distributionManagement>
+		 <snapshotRepository>
+		    <id>nexusRepo</id>
+		    <url>http://3.80.130.147:8081/repository/maven-snapshots/</url>
+		 </snapshotRepository>
+		
+		 <repository>
+		    <id>nexusRepo</id>
+		    <url>http://3.80.130.147:8081/repository/maven-releases/</url>
+		 </repository>
+  </distributionManagement>
+
   <build>
     <finalName>devops</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
