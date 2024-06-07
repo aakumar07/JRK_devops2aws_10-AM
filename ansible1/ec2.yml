@@ -1,0 +1,23 @@
+---
+ - name: EC2 instance creation
+   hosts: localhost
+   become: true
+   tasks:
+    - pip:
+       name: boto
+    - name: Configuring instance
+      ec2:
+        aws_access_key: 
+        aws_secret_key: 
+        region: us-east-1
+        image: 
+        count: 1
+        instance_type: t2.micro
+        key_name: git_connect
+        vpc_subnet_id: ami-0d191299f2822b1fa
+        assign_public_ip: true
+        group: launch-wizard-2
+        wait: yes
+        instance_tags:
+          Name: ansible_instance
+      register: ec2
