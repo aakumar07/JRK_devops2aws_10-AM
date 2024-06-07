@@ -1,0 +1,20 @@
+---
+- hosts: node1
+  become: true
+  gather_facts: no
+  tasks:
+   - name: Installing java
+     yum:
+      name: java-1.8.0-openjdk
+      state: present
+   - name: Adding Maven repos
+     ansible.builtin.get_url:
+      url: http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo
+      dest: /etc/yum.repos.d/epel-apache-maven.repo
+
+   - name: Adding sed editor
+     shell: sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+   - name: Installing Mave
+     yum:
+      name: apache-maven
+      state: present

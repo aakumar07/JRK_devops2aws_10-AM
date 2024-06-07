@@ -1,0 +1,43 @@
+---
+- hosts: node1
+  become: true
+  tasks:
+   - name: Java Installing
+     yum:
+      name: java-1.8.0-openjdk
+      state: present
+
+   - name: Tomcat Download
+     ansible.builtin.get_url:
+      url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz
+      dest: /tmp 
+
+   - name: Untar the Tomcat
+     ansible.builtin.unarchive:
+      src: /tmp/apache-tomcat-9.0.89.tar.gz
+      dest: /tmp 
+      remote_src: yes
+
+   - name: rename the Tomcat
+     command: mv /tmp/apache-tomcat-9.0.89 /tmp/tomcat-9
+
+   - name: giving the full permission for webapp
+     ansible.builtin.file:
+      path: /tmp/tomcat-9/webapps
+      mode: '0777'
+      state: directory
+
+   - name: devling the valve tag 
+     lineinfile:
+      path: /tmp/tomcat-9/webapps/manager/META-INF/context.xml
+      state: absent 
+      regexp: 'Valve'
+
+   - name: adding new line in file 
+     lineinfile:
+      path: /tmp/tomcat-9/conf/tomcat-users.xml
+      line: '<user username="tomcat" password="tomcat" roles="manager-gui,manager-script"/>'
+      insertbefore: '</tomcat-users>'
+
+   - name: starting Tomcat
+     shell: /tmp/tomcat-9/bin/startup.sh
